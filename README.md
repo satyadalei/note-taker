@@ -5,16 +5,12 @@ It helps people `take notes` with ease like `Keeper` app of Google
 ## Contributor
 
 <div style="margin-bottom:10px" >
-  <p align="center" style="display:flex;align-items:center; margin-right:20px;">
-  <img src="https://avatars.githubusercontent.com/u/74782403?v=4" width="50" height="50" alt="John Doe's Avatar" style="border-radius:50%; margin-right:1rem">
-  
+
   [Satyabarayan Dalei](https://github.com/satyadalei)
 </p>
 </div>
 <div>
-  <p align="center" style="display:flex;align-items:center; margin-right:20px;">
-  <img src="https://avatars.githubusercontent.com/u/157508647?v=4" width="50" height="50" alt="John Doe's Avatar" style="border-radius:50%; margin-right:1rem">
-  
+
   [Kwatar Hina](https://github.com/kwatarhina)
 </p>
 </div>
