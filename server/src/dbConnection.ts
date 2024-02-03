@@ -1,8 +1,9 @@
-import dotenv from "dotenv";
-dotenv.config();
+// import dotenv from "dotenv";
+// dotenv.config();
 import { MongoClient, Db } from "mongodb";
 
 let databaseUrl: string;
+
 if (process.env.DATABASE_URL) {
     databaseUrl = process.env.DATABASE_URL;
 } else {
