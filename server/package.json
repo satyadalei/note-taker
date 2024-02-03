@@ -5,14 +5,21 @@
   "license": "MIT",
   "scripts": {
     "start": "node ./build/index.js",
-    "dev" : "tsc-watch --onSuccess \"yarn start\""
+    "dev": "tsc-watch --onSuccess \"yarn start\""
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
     "tsc-watch": "^6.0.4",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.3.0"
   }
 }
