@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { myAsyncFunc } from '../../utils/asyncFunc';
+import apiInstance1  from "../../services/axiosServices"
 
 export interface AddNote {
     id?: string | null
@@ -22,8 +23,9 @@ const NoteTakeInputBox = () => {
         title: "",
         content: ""
     });
-     console.log("Timeout ref",timeoutRef);
-     
+    
+    
+
     // let debounceNote : any ;
     const handleNoteChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue: string = e.target.value
@@ -48,6 +50,9 @@ const NoteTakeInputBox = () => {
         timeoutRef.current = setTimeout(async () => {
             console.log("----------------------------------------------------------------");
             // call API & set that API is Called to true until response comes back & once response comes back then set Is API called to false
+            const response1 = await apiInstance1.post("/note/createNote");
+            console.log(response1);
+            
             totalApiCall.current = totalApiCall.current + 1;
             isChangesDoneBeforeApiResponses.current = false
             const response = await myAsyncFunc();
