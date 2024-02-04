@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { dataBase } from "../index";
+import { dataBase, userCollection } from "../index";
 import { ObjectId } from "mongodb";
 import { ResponseJson } from "../utils/reqAndResUtil"
 import { encryptPasswords, comparePasswords } from "../helpers/mangePassword"
@@ -19,17 +19,20 @@ interface userDetails {
 async function handleCreateUser(req: Request, res: Response) {
     const responseJson = new ResponseJson(req, res);
     try {
-        const userCollection = dataBase.collection("users");
-        // generateAuthToken({_id:"", email:""},1000)
         const { name, email, password } = req.body;
+        // get email
+        if (!email) {
+            return responseJson.customResponse(false, 400, "Invalid credentials. Please fill all the fields.");
+        }
+
         // check if the user exists
         const result = await userCollection.findOne({ email });
         if (result) {
-            return responseJson.costumeResponse(false, 409, "User already exists");
+            return responseJson.customResponse(false, 409, "User already exists");
         } else {
             // validate user data
-            if (!name || !email || !password) {
-                return responseJson.costumeResponse(false, 400, "Invalid credentials. Please fill all the fields.");
+            if (!name || !password) {
+                return responseJson.customResponse(false, 400, "Invalid credentials. Please fill all the fields.");
             }
 
             // encrypt password
@@ -50,16 +53,16 @@ async function handleCreateUser(req: Request, res: Response) {
             const responseData = { authToken, newUser }
             return responseJson.successResponse("User created successfully", responseData);
         }
-    } catch (error) {
-        console.log(error);
+    } catch (error : any) {
+        responseJson.logError(error,);
         return responseJson.internalServerErrorResponse(error)
     }
 }
 
 
 async function handleDeleteUser(req: Request, res: Response) {
-    const userCollection = dataBase.collection("users");
-    console.log("collection", userCollection);
+    // const userCollection = dataBase.collection("users");
+    // console.log("collection", userCollection);
     const result = await userCollection.deleteOne({ name: "Satyanarayanan" });
     console.log(result);
     return res.json({

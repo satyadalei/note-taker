@@ -29,7 +29,7 @@ class ResponseJson {
             data: data || this.data
         });
     }
-    costumeResponse(success: boolean,httpStatusCode:number,message:string, data?:any): Response{
+    customResponse(success: boolean,httpStatusCode:number,message:string, data?:any): Response{
         return this.res.status(httpStatusCode).json({
             success,
             message,
@@ -52,6 +52,12 @@ class ResponseJson {
             success: this.success,
             message: this.message
         });
+    }
+    logError(err: any, method?: string | null, apiPath?: string | null ): void{
+        console.log("\n---- Error -----");
+        console.log("Method :", method);
+        console.log("API Path :", apiPath);
+        console.log("\n Error details", err);
     }
 }
 

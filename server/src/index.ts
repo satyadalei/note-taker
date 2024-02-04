@@ -7,7 +7,7 @@ import { connectToDatabase, getDatabase } from "./dbConnection"
 import { Db } from 'mongodb';
 import useRouter from "./routes/user"
 import bodyParser from "body-parser"
-
+import noteRouter from "./routes/note"
 
 const app = express();
 
@@ -20,6 +20,9 @@ app.use(bodyParser.json())
 
 
 let dataBase: Db;
+let noteCollection:any;
+let userCollection:any;
+
 // first connect to database & then only start the server
 connectToDatabase((err) => {
     if (err) {
@@ -28,8 +31,12 @@ connectToDatabase((err) => {
         // here you can email the administrator that database connection failed
     } else {
         dataBase = getDatabase();
+        noteCollection = dataBase.collection("notes");
+        userCollection = dataBase.collection("users");
+
         //---------- All Routes ----------------------
         app.use('/api/user', useRouter);
+        app.use("/api/note", noteRouter);
 
         app.get('/', (req, res) => {
             res.json({
@@ -58,4 +65,4 @@ connectToDatabase((err) => {
 
 
 
-export { dataBase }
+export { dataBase, noteCollection , userCollection}
