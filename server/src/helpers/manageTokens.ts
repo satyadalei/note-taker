@@ -22,8 +22,11 @@ if (!process.env.AUTH_TOKEN_SECRET_KEY) {
     secretKey = process.env.AUTH_TOKEN_SECRET_KEY;
 }
 
-function generateAuthToken(dataObject: UntokenData, expireTime: number): string {
+function generateAuthToken(dataObject: UntokenData, expireTime?: number ): string {
     // expireTime is in seconds
+    if (!expireTime) {
+        expireTime = 1 * 60 * 60 * 24 * 30;
+    }
     return jwt.sign(dataObject, secretKey, { expiresIn: expireTime })
 }
 
