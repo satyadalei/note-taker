@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react';
+import { myAsyncFunc } from '../../utils/asyncFunc';
 
-interface AddNote {
+export interface AddNote {
     id?: string | null
     title: string;
     content: string;
@@ -11,18 +12,28 @@ const NoteTakeInputBox = () => {
     const componentRef = useRef<HTMLDivElement>(null);
     const noteInputRef = useRef<HTMLInputElement>(null);
     const timeoutRef = useRef<number | null>(null);// this will help clearing out previous setTimeout and assign new Timeout.
+    const totalApiCall = useRef<number>(0);
+    const totalChanges = useRef<number>(0);
+    const isChangesDoneBeforeApiResponses = useRef<boolean>(false);
 
-    
 
     const [noteInput, setNoteInput] = useState<AddNote>({
         id: null,
         title: "",
         content: ""
     });
-
+     console.log("Timeout ref",timeoutRef);
+     
     // let debounceNote : any ;
     const handleNoteChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue: string = e.target.value
+        /*
+          if API called() is true then
+          isChangesDoneBeforeApiResponses = true;
+        */
+        isChangesDoneBeforeApiResponses.current = true;
+        totalChanges.current = totalChanges.current + 1;
+
         setNoteInput({
             ...noteInput,
             [e.target.name]: newValue
@@ -34,13 +45,26 @@ const NoteTakeInputBox = () => {
         }
 
         // Trigger auto-save after the input changes (debounced)
-        timeoutRef.current = setTimeout(() => {
+        timeoutRef.current = setTimeout(async () => {
             console.log("----------------------------------------------------------------");
+            // call API & set that API is Called to true until response comes back & once response comes back then set Is API called to false
+            totalApiCall.current = totalApiCall.current + 1;
+            isChangesDoneBeforeApiResponses.current = false
+            const response = await myAsyncFunc();
+            console.log("Total API call", totalApiCall.current);
+            console.log("Total Changes made", totalChanges.current);
+            if (isChangesDoneBeforeApiResponses.current) {
+               // ignore response
+               console.log("Response ignored", response);
+            }else{
+                // implement response callback
+                console.log("Response implemented");
+            }
         }, 1000);
     }
-  
 
-    
+
+
 
     // whenever mouse is clicked outside of the component, then it automatically closes the expanded input box
     useEffect(() => {

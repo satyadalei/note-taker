@@ -1,6 +1,11 @@
+import PageNotFound from "../components/error/PageNotFound"
+
 const Error = () => {
   return (
-    <div>I am Error page</div>
+    <div>
+      I am Error page
+      <PageNotFound />
+    </div>
   )
 }
 
