@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { myAsyncFunc } from '../../utils/asyncFunc';
-import apiInstance1  from "../../services/axiosServices"
+import apiInstance1  from "../../services/axiosInstance"
 
 export interface AddNote {
     id?: string | null

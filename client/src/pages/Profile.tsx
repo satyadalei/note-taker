@@ -1,8 +1,10 @@
+import PageSection from "../components/PageSection"
+
 const Profile = () => {
   return (
-    <div>
+    <PageSection>
         <h1>I am Profile Page</h1>
-    </div>
+    </PageSection>
   )
 }
 
