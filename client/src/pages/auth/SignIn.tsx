@@ -6,12 +6,16 @@ import InputElement from "../../components/common/InputElement";
 import RedirectNotice from "../../components/common/RedirectNotice";
 import { signInUser } from "../../services/user";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../store/hooks";
+import {setIsLogedIn} from "../../store/slices/user"
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [loginCredentials, setLoginCredentials] = useState({
-    email: "satyanarayandalei9809@gmail.com",
-    password: "satya123",
+    email: "",
+    password: "",
   })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,18 +29,20 @@ const SignIn = () => {
     // validate user email and password before calling function
     signInUser(loginCredentials.email, loginCredentials.password)
     .then((result) =>{
-      console.log(result);
-      
       if (result.isSuccess) {
         // save content to storage by stringyfying them
-        localStorage.setItem("authToken", JSON.stringify(result.data.authToken));
-        localStorage.setItem("userInfo", JSON.stringify(result.data.user));
+        localStorage.setItem("authToken", JSON.stringify(result.responseData.authToken));
+        localStorage.setItem("userInfo", JSON.stringify(result.responseData.user));  
+        localStorage.setItem("isLogedIn", "true");   
+        
+        // change login status & user info
+        dispatch(setIsLogedIn(result.responseData.user))
         // redirect to note page
-        navigate("/note");
+        navigate("/notes");
       }else{
         // alert user that login failed
         // console.log(result.data.message);  
-        window.alert(result.data.message);      
+        window.alert(result.responseData.message.split("#")[0]);      
       }
     })
   }
