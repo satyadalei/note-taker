@@ -1,6 +1,10 @@
+import PageSection from "../components/PageSection"
+
 const ArchivedNotes = () => {
   return (
-    <div>ArchivedNotes</div>
+    <PageSection>
+      ArchivedNotes
+    </PageSection>
   )
 }
 

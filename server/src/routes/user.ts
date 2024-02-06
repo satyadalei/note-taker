@@ -1,6 +1,7 @@
 import express from "express";
+
 const router = express.Router();
-import { handleCreateUser, handleDeleteUser, handleUpdateUser, userDetails } from "../controllers/user";
+import { handleCreateUser, handleUserLogin, handleDeleteUser, handleUpdateUser, userDetails } from "../controllers/user";
 import { authorizeUser, CustomRequest } from "../middlewares/authorizeUser"
 
 router
@@ -9,6 +10,12 @@ router
         handleCreateUser(req,res)
     })
 
+router
+    .route("/login")    
+    .post((req, res) => {
+        handleUserLogin(req,res);
+    })
+    
 router
     .route("/deleteUser")    
     .get((req, res) => {

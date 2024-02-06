@@ -1,10 +1,11 @@
+import PageSection from "../components/PageSection"
 import NoteTakeInputBox from "../components/note/NoteTakeInputBox"
 
 const Notes = () => {
   return (
-    <div>
-      <NoteTakeInputBox />
-    </div>
+    <PageSection>
+       <NoteTakeInputBox />
+    </PageSection>
   )
 }
 
