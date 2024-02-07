@@ -4,7 +4,7 @@ import {ResponseUserInfo, getUserDetails} from "../../services/user"
 
 interface UserAuthState{
    isLogedIn: boolean;
-   userDetails: ResponseUserInfo | null | undefined | string;
+   userDetails: ResponseUserInfo | null | undefined;
 }
 // ResponseUserInfo
 const initialState: UserAuthState = {

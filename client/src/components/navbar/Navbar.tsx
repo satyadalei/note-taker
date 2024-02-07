@@ -20,9 +20,9 @@ const Navbar = () => {
         { name: 'Archived', path: "/archives" }
     ]
     return (
-        <div className="bg-yellow-500 min-h-14 flex items-center justify-between pl-2 pr-2 md:pr-3" >
-            <Logo logoText='📝' />
-            <ul className='flex' >
+        <div className="bg-yellow-500 min-h-14 flex items-center pl-2 pr-2 md:pr-3" >
+            <Logo className='w-[20%] mr-5' logoText='📝' />
+            <ul className=' w-[30%] flex' >
                 {navItems.map((item, index) => {
                     if (userAuthDetails.isLogedIn === false && (item.name === "Notes" || item.name === "Profile" || item.name === "Archived")) {
                         return null
@@ -34,12 +34,12 @@ const Navbar = () => {
                     )
                 })}
             </ul>
-            <div>
+            <div className='w-[60%] flex items-center' >
                 {userAuthDetails.isLogedIn ?
-                    <>
-                        <GeneralButton buttonText='Log out' onClick={() => { dispatch(setLogOut()) }} />
+                    <div className='w-full  flex items-center justify-between'>
                         <SearchBar />
-                    </> :
+                        <GeneralButton buttonText='Log out' onClick={() => { dispatch(setLogOut()) }} />
+                    </div> :
                     <>
                         <GeneralButton className='mr-3' buttonText='Sign In' onClick={() => { navigate("/signin") }} />
                         <GeneralButton className='bg-white/0 border-2' buttonText='Sign Up' onClick={() => { navigate("/signup") }} />

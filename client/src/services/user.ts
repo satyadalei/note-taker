@@ -1,7 +1,5 @@
 import apiInstance1 from "./axiosInstance";
 interface APIResponse {
-    user: string;
-    authToken: string;
     message: string;
     success: boolean;
     data?: LoginUserResponseData | NewUserResponseData | null;
@@ -9,7 +7,7 @@ interface APIResponse {
 
 interface NewUserResponseData {
     authToken: string;
-    newUser: ResponseUserInfo
+    newUser: ResponseUserInfo;
 }
 
 interface LoginUserResponseData {
@@ -23,11 +21,17 @@ interface ResponseUserInfo {
     email: string;
 }
 
+interface FinalReturnDate{
+    isSuccess:boolean;
+    responseData: APIResponse
+}
 
-function getUserDetails(): ResponseUserInfo | string | null | undefined {
-    let userDetails: string | ResponseUserInfo | null | undefined = localStorage.getItem("userInfo");    
+
+function getUserDetails(): ResponseUserInfo | null | undefined {
+    const userInfoString: string | null | undefined = localStorage.getItem("userInfo");  
+    let userDetails : ResponseUserInfo | null | undefined ;  
     if (userDetails !== null) {
-        userDetails = JSON.parse(userDetails);
+        userDetails = JSON.parse(userInfoString as string);
     }else{
         userDetails = undefined;
     }
@@ -63,32 +67,36 @@ async function signInUser(email: string, password: string) {
     return apiInstance1.post("/user/login", { email, password })
         .then((response) => {
             const { data } = response;
-            const responseData: APIResponse = data.data
-            console.log("bla bla bla", responseData);
-            return { isSuccess: true, responseData };
+            const responseData: APIResponse = data;
+            const finalData : FinalReturnDate = { isSuccess: true, responseData : responseData };
+            return finalData
         })
         .catch((error) => {
             const { response } = error;
             const { data } = response;
             const responseData: APIResponse = data;
-            return { isSuccess: false, responseData };
+            const finalData : FinalReturnDate = { isSuccess: false, responseData : responseData };
+            return finalData
         })
 }
-
 
 
 async function signUpUser(email: string, name: string, password: string) {
     return apiInstance1.post("/user/createUser", { email, name, password })
         .then((response) => {
             const { data } = response;
-            return { isSuccess: true, data: data.data };
+            const responseData: APIResponse = data
+            const finalData : FinalReturnDate = { isSuccess: true, responseData : responseData };
+            return finalData
         })
-        .catch((error) => {
+        .catch((error) => {            
             const { response } = error;
             const { data } = response;
-            return { isSuccess: false, data };
+            const responseData: APIResponse = data;
+            const finalData : FinalReturnDate = { isSuccess: false, responseData : responseData };
+            return finalData
         });
 }
 
 export { checkUserAuthStatus, signInUser, signUpUser, getUserDetails };
-export type { ResponseUserInfo };
+export type { ResponseUserInfo, FinalReturnDate, NewUserResponseData, LoginUserResponseData };
