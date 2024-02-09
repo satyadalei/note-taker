@@ -9,8 +9,8 @@ const Logo: React.FC<LogoComponentProps> = ({ logoText, className }) => {
   return (
     <div className={`text-2xl font-bold text-white ${className}`} >
       {/* This link will redirect to home page or notes page based on user login status */}
-      <Link to="/notes" >
-        <span >{logoText}</span>
+      <Link to="/" >
+        <span > {logoText} </span>
         <span  >Note Taker</span>
       </Link>
     </div>

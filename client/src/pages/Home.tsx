@@ -1,7 +1,16 @@
+import { useEffect } from "react"
 import PageSection from "../components/PageSection"
 import GeneralButton from "../components/common/GeneralButton"
-
+import { useAppSelector } from "../store/hooks";
+import {useNavigate} from "react-router-dom"
 const Home = () => {
+  const userAuthDetails = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
+  useEffect(()=>{
+   if (userAuthDetails.isLogedIn) {
+      navigate("/notes")
+   }
+  },[navigate, userAuthDetails.isLogedIn])
   return (
     <PageSection>
       <div className="pt-40 flex flex-col justify-center items-center" >

@@ -1,19 +1,20 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import {useAppSelector} from "../store/hooks"
+
 interface ProtectedPagesContent{
     children: React.ReactNode
 }
 const ProtectedPages : React.FC<ProtectedPagesContent> = ({children}) => {
-    console.log("I am Protected");
+    const userAuthDetails = useAppSelector((state) => state.user);
+
     const navigate = useNavigate();
-    const isAuthenticated  = localStorage.getItem("authToken");
-    const isLogedIn = localStorage.getItem("isLogIn");
 
     useEffect(()=>{
-        if (!isAuthenticated && !isLogedIn) {
+        if (userAuthDetails.isLogedIn === false) {
             navigate("/signin")
         }  
-    },[])
+    },[navigate, userAuthDetails.isLogedIn])
   return (
     <div>
         {children}

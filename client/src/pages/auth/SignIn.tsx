@@ -4,14 +4,18 @@ import GeneralButton from "../../components/common/GeneralButton";
 import GeneralHeading from "../../components/common/GeneralHeading";
 import InputElement from "../../components/common/InputElement";
 import RedirectNotice from "../../components/common/RedirectNotice";
-import { signInUser } from "../../services/user";
+import { LoginUserResponseData, ResponseUserInfo, signInUser } from "../../services/user";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../store/hooks";
+import {setIsLogedIn} from "../../store/slices/user"
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [loginCredentials, setLoginCredentials] = useState({
-    email: "satyanarayandalei9809@gmail.com",
-    password: "satya123",
+    email: "",
+    password: "",
   })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,20 +27,24 @@ const SignIn = () => {
 
   const handleSignIn = async () => {
     // validate user email and password before calling function
-    signInUser(loginCredentials.email, loginCredentials.password)
+    const {email, password} =  loginCredentials
+    signInUser(email, password)
     .then((result) =>{
-      console.log(result);
-      
       if (result.isSuccess) {
+        const authToken: string | undefined = result.responseData?.data?.authToken;
+        const userInfo: ResponseUserInfo = (result.responseData?.data as LoginUserResponseData ).user;
         // save content to storage by stringyfying them
-        localStorage.setItem("authToken", JSON.stringify(result.data.authToken));
-        localStorage.setItem("userInfo", JSON.stringify(result.data.user));
+        localStorage.setItem("authToken", authToken as string);
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));  
+        localStorage.setItem("isLogedIn", "true");   
+        
+        // change login status & user info
+        dispatch(setIsLogedIn(userInfo));
         // redirect to note page
-        navigate("/note");
+        navigate("/notes");
       }else{
-        // alert user that login failed
-        // console.log(result.data.message);  
-        window.alert(result.data.message);      
+        // alert user that login failed 
+        window.alert(result.responseData.message.split("#")[0]);      
       }
     })
   }
