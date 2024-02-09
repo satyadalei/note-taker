@@ -20,6 +20,13 @@ interface NoteReturnData extends CommonReturnData {
   responseData: NoteResponse
 }
 
+interface AllNoteResponseData extends CommonAPIResponseData {
+  data: Array<Note> | null;
+}
+interface AllNoteReturnData extends CommonReturnData {
+  responseData: AllNoteResponseData
+}
+
 async function createNote(note: AddNote, _id: string | null) {
   return apiInstance1.post("/note/createNote", {
     _id: _id,
@@ -41,11 +48,23 @@ async function createNote(note: AddNote, _id: string | null) {
     })
 }
 
-async function fetchNotes(){
-  
+async function fetchNotes() {
+  return apiInstance1.get("/note/fetchAllNote")
+    .then((result) => {
+      const responseData: AllNoteResponseData = result.data;
+      const finalData: AllNoteReturnData = { isSuccess: true, responseData };
+      return finalData
+    })
+    .catch((error) => {
+      const { response } = error;
+      const { data } = response;
+      const responseData: AllNoteResponseData = data;
+      const finalData: AllNoteReturnData = { isSuccess: true, responseData };
+      return finalData;
+    })
 }
 
 
 
-export { createNote , fetchNotes};
-export type { NoteReturnData };
+export { createNote, fetchNotes };
+export type { NoteReturnData, AllNoteReturnData , Note};
