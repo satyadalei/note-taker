@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { ResponseJson } from "../utils/reqAndResUtil"
 import { dataBase, noteCollection } from "../index";
 import { ObjectId } from "mongodb";
-import { CustomRequest } from "../middlewares/authorizeUser";
+import { CustomRequest } from "../middlewares/user";
 
 /* this function is mainly responsible for creating a note entry but based on behaviors of users while creating a new note entry it also performs Update & Delete operations. This is used because of autosave feature in frontend */
 async function handleCreateNote(req: CustomRequest, res: Response) {
@@ -41,7 +41,7 @@ async function handleCreateNote(req: CustomRequest, res: Response) {
                 if (title !== "" || content !== "") {
                     // create a note
                     const newNote = await noteCollection.insertOne({
-                        authorId : req.userAuthDetails?._id ,
+                        authorId : new ObjectId(req.userAuthDetails?._id) ,
                         title,
                         content,
                         createdAt 
@@ -81,7 +81,29 @@ async function handleCreateNote(req: CustomRequest, res: Response) {
 async function handleUpdateNote(req: CustomRequest, res: Response) {
     const responseJson = new ResponseJson(req, res);
     try {
-      
+       const {_id, title, content} = req.body;
+       if (!_id || _id === null) {
+           return responseJson.customResponse(false, 400, "Invalid credentials. _id is missing in body.");
+       }
+       if (!title && !content) {
+         return responseJson.customResponse(false, 400, "Invalid credentials. At least title or content should be provided.");
+       }
+       const findNote = await noteCollection.findOne({ _id: new ObjectId(_id) });
+       if (!findNote) {
+           return responseJson.customResponse(false, 400, "Note not found.");
+       }
+       // checking of whether note belongs to correct owner is done in the middleware
+       // so update
+
+       await noteCollection.updateOne({ _id: new ObjectId(_id)},{
+        $set: {
+            title: title || "",
+            content: content || ""
+        }
+       })
+       const note = await noteCollection.findOne({ _id: new ObjectId(_id) });
+       responseJson.successResponse("Note updated successfully", note);
+
     } catch (error) {
         responseJson.logError(error, req.method, req.path);
         responseJson.internalServerErrorResponse();
@@ -92,11 +114,27 @@ async function handleUpdateNote(req: CustomRequest, res: Response) {
 async function handleDeleteNote(req: CustomRequest, res: Response) {
     const responseJson = new ResponseJson(req, res);
     try {
-      
+      const {noteId} = req.query;
+      if (!noteId) {
+        return responseJson.customResponse(false, 400, "Note id is missing");
+      }
+      await noteCollection.deleteOne({_id: new ObjectId(noteId as string)});
+      responseJson.successResponse("Note deleted successfully");
     } catch (error) {
         responseJson.logError(error, req.method, req.path);
         responseJson.internalServerErrorResponse();
     }
 }
 
-export { handleCreateNote , handleUpdateNote, handleDeleteNote}
+async function handleFetchAllNotes(req: CustomRequest, res: Response){
+    const responseJson = new ResponseJson(req, res);
+    try {        
+        const allNotes = await noteCollection.find({authorId: new ObjectId(req.userAuthDetails?._id)}).toArray();
+        return responseJson.successResponse("All notes sent successfully", allNotes);
+    } catch (error) {
+        responseJson.logError(error, req.method, req.path);
+        responseJson.internalServerErrorResponse();
+    }
+}
+
+export { handleCreateNote , handleUpdateNote, handleDeleteNote, handleFetchAllNotes}

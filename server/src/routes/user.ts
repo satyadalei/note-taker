@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 import { handleCreateUser, handleUserLogin, handleDeleteUser, handleUpdateUser, userDetails } from "../controllers/user";
-import { authorizeUser, CustomRequest } from "../middlewares/authorizeUser"
+import { authorizeUser, CustomRequest } from "../middlewares/user"
 
 router
     .route("/createUser")
