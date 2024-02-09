@@ -16,9 +16,7 @@ export const userAuthSlice = createSlice({
     name: 'userAuth',
     initialState,
     reducers: {
-        setIsLogedIn: (state, action ) => {
-            console.log("action ",action);
-            
+        setIsLogedIn: (state, action ) => {            
             state.isLogedIn = true;
             const userinfo : ResponseUserInfo = action.payload
             state.userDetails =  userinfo;

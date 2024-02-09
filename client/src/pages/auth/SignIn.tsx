@@ -34,7 +34,7 @@ const SignIn = () => {
         const authToken: string | undefined = result.responseData?.data?.authToken;
         const userInfo: ResponseUserInfo = (result.responseData?.data as LoginUserResponseData ).user;
         // save content to storage by stringyfying them
-        localStorage.setItem("authToken", JSON.stringify(authToken));
+        localStorage.setItem("authToken", authToken as string);
         localStorage.setItem("userInfo", JSON.stringify(userInfo));  
         localStorage.setItem("isLogedIn", "true");   
         

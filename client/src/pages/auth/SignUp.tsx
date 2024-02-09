@@ -4,7 +4,7 @@ import GeneralButton from "../../components/common/GeneralButton"
 import GeneralHeading from "../../components/common/GeneralHeading"
 import InputElement from "../../components/common/InputElement"
 import RedirectNotice from "../../components/common/RedirectNotice"
-import { signUpUser, FinalReturnDate, ResponseUserInfo, NewUserResponseData } from "../../services/user"
+import { signUpUser, FinalReturnData, ResponseUserInfo, NewUserResponseData } from "../../services/user"
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import { setIsLogedIn } from "../../store/slices/user"
@@ -32,13 +32,13 @@ const SignUp = () => {
   const handleSignUp = async () => {
     const { email, password, name } = userSignupDetails
     signUpUser(email, password, name)
-      .then((result: FinalReturnDate) => {
+      .then((result: FinalReturnData) => {
         if (result.isSuccess) {
           const authToken: string | undefined = result.responseData?.data?.authToken;
           const userInfo: ResponseUserInfo = (result.responseData?.data as NewUserResponseData).newUser;
           // save content to storage by stringyfying them
           localStorage.setItem("isLogedIn", "true");
-          localStorage.setItem("authToken", JSON.stringify(authToken));
+          localStorage.setItem("authToken", authToken as string);
           localStorage.setItem("userInfo", JSON.stringify(userInfo));
           // change login status & user info
           dispatch(setIsLogedIn(userInfo))

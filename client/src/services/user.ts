@@ -1,10 +1,12 @@
 import apiInstance1 from "./axiosInstance";
-interface APIResponse {
-    message: string;
-    success: boolean;
+
+interface APIResponse extends CommonAPIResponseData {
     data?: LoginUserResponseData | NewUserResponseData | null;
 }
-
+interface CommonAPIResponseData{
+    message: string;
+    success: boolean;
+}
 interface NewUserResponseData {
     authToken: string;
     newUser: ResponseUserInfo;
@@ -21,9 +23,12 @@ interface ResponseUserInfo {
     email: string;
 }
 
-interface FinalReturnDate{
-    isSuccess:boolean;
+interface FinalReturnData extends CommonReturnData{
     responseData: APIResponse
+}
+
+interface CommonReturnData{
+    isSuccess:boolean;
 }
 
 
@@ -68,14 +73,14 @@ async function signInUser(email: string, password: string) {
         .then((response) => {
             const { data } = response;
             const responseData: APIResponse = data;
-            const finalData : FinalReturnDate = { isSuccess: true, responseData : responseData };
+            const finalData : FinalReturnData = { isSuccess: true, responseData : responseData };
             return finalData
         })
         .catch((error) => {
             const { response } = error;
             const { data } = response;
             const responseData: APIResponse = data;
-            const finalData : FinalReturnDate = { isSuccess: false, responseData : responseData };
+            const finalData : FinalReturnData = { isSuccess: false, responseData : responseData };
             return finalData
         })
 }
@@ -86,17 +91,17 @@ async function signUpUser(email: string, name: string, password: string) {
         .then((response) => {
             const { data } = response;
             const responseData: APIResponse = data
-            const finalData : FinalReturnDate = { isSuccess: true, responseData : responseData };
+            const finalData : FinalReturnData = { isSuccess: true, responseData : responseData };
             return finalData
         })
         .catch((error) => {            
             const { response } = error;
             const { data } = response;
             const responseData: APIResponse = data;
-            const finalData : FinalReturnDate = { isSuccess: false, responseData : responseData };
+            const finalData : FinalReturnData = { isSuccess: false, responseData : responseData };
             return finalData
         });
 }
 
 export { checkUserAuthStatus, signInUser, signUpUser, getUserDetails };
-export type { ResponseUserInfo, FinalReturnDate, NewUserResponseData, LoginUserResponseData };
+export type {CommonAPIResponseData, CommonReturnData, APIResponse, ResponseUserInfo, FinalReturnData, NewUserResponseData, LoginUserResponseData };
