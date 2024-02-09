@@ -42,5 +42,6 @@ function authorizeUser(req: CustomRequest, res: Response, next: NextFunction) {
     }
 }
 
+
 export { authorizeUser, CustomRequest }
 

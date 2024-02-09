@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 import { ResponseJson } from "../utils/reqAndResUtil"
 import { encryptPasswords, comparePasswords } from "../helpers/mangePassword"
 import { generateAuthToken } from "../helpers/manageTokens"
-import { CustomRequest } from "../middlewares/authorizeUser"
+import { CustomRequest } from "../middlewares/user"
 // const userCollection = dataBase.collection("users");
 // // we need to specify the explicitly "../index". Here the default is index.ts
 // console.log(userCollection);
