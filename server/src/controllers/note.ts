@@ -14,9 +14,9 @@ async function handleCreateNote(req: CustomRequest, res: Response) {
         if (!createdAt) {
             createdAt = new Date();
         }
-        if (!title && !content) {
-            return responseJson.customResponse(false, 400, "There must be a title or content to create a note.");
-        }
+        // if (!title && !content) {
+        //     return responseJson.customResponse(false, 400, "There must be a title or content to create a note.");
+        // }
 
         if (!_id || _id === null) {
             // create a new note

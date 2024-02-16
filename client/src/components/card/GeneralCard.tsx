@@ -5,11 +5,10 @@ interface GeneralCard{
     className?: string;
     title?: string;
     content?: string;
-    key?: string;
 }
-const GeneralCard : React.FC<GeneralCard> = ({className,title, content, key}) => {
+const GeneralCard : React.FC<GeneralCard> = ({className,title, content}) => {
     return (
-        <Card key={key} className={`py-4 w-full sm:w-48 md:w-60 ${className}`}>
+        <Card className={`py-4 w-full sm:w-48 md:w-60 ${className}`}>
             { title !== undefined && title?.length > 0 && 
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                 <p className="text-tiny uppercase font-bold">{title}</p>

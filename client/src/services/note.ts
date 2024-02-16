@@ -24,7 +24,7 @@ interface AllNoteResponseData extends CommonAPIResponseData {
   data: Array<Note> | null;
 }
 interface AllNoteReturnData extends CommonReturnData {
-  responseData: AllNoteResponseData
+  responseData: AllNoteResponseData | null;
 }
 
 async function createNote(note: AddNote, _id: string | null) {
@@ -49,9 +49,22 @@ async function createNote(note: AddNote, _id: string | null) {
 }
 
 async function fetchNotes() {
+  const allUserNotes = localStorage.getItem("allUserNotes");
+
+  if(allUserNotes !== null) {
+    const data = JSON.parse(allUserNotes);
+    const responseData : AllNoteResponseData = {
+      success: true,
+      message:"notes retrieved from localStorage successfully",
+      data: data
+    }
+    return {isSuccess: true, responseData: responseData}
+  }
+
   return apiInstance1.get("/note/fetchAllNote")
     .then((result) => {
       const responseData: AllNoteResponseData = result.data;
+      localStorage.setItem("allUserNotes", JSON.stringify(result.data.data));
       const finalData: AllNoteReturnData = { isSuccess: true, responseData };
       return finalData
     })
