@@ -27,6 +27,7 @@ const NoteTakeInputBox = () => {
 
 
     // let debounceNote : any ;
+    /* This handleNoteChange function is responsible for auto save feature while editing the note */
     const handleNoteChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue: string = e.target.value
 
@@ -41,7 +42,7 @@ const NoteTakeInputBox = () => {
         }
     }
 
-    // Trigger auto-save after the input changes (debounced)        
+    // Trigger auto-save after certain delay of the input changes (debounced)        
     useEffect(() => {
         if (currentNoteId !== null || noteInput.title !== "" || noteInput.content !== "") {
             timeoutRef.current = setTimeout(async () => {
@@ -68,6 +69,9 @@ const NoteTakeInputBox = () => {
         const handleClickOutside = (event: MouseEvent) => {
             if (componentRef.current && !componentRef.current.contains(event.target as Node)) {
                 // First modify local storage note
+                console.log("I am main outside");
+                console.log(event);
+                
                 const usersAllNotes = localStorage.getItem("allUserNotes");
                 if (usersAllNotes !== null) {
                     // Update local storage
